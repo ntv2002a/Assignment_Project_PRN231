@@ -33,13 +33,13 @@ public partial class User
 
     public int RoleId { get; set; }
 
-    public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
+    public virtual ICollection<Course>? Courses { get; set; } = new List<Course>();
 
-    public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+    public virtual ICollection<Enrollment>? Enrollments { get; set; } = new List<Enrollment>();
 
     public virtual Role Role { get; set; } = null!;
 
-    public virtual ICollection<Token> Tokens { get; set; } = new List<Token>();
+    public virtual ICollection<Token>? Tokens { get; set; } = new List<Token>();
 
-    public virtual ICollection<UserResult> UserResults { get; set; } = new List<UserResult>();
+    public virtual ICollection<UserResult>? UserResults { get; set; } = new List<UserResult>();
 }

@@ -1,5 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using OnlineLearning_API.IService;
 using OnlineLearning_API.Models;
+using OnlineLearning_API.Service;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +24,27 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddTransient<IAuthService, AuthService>();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateActor = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        RequireExpirationTime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration.GetSection("Jwt:Issuer").Value,
+        ValidAudience = builder.Configuration.GetSection("Jwt:Audience").Value,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value))
+
+    };
+});
 
 var app = builder.Build();
 
@@ -29,7 +55,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
 app.UseCors("CORSPolicy");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
