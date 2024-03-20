@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineLearning_API.DTO.User;
@@ -43,7 +46,15 @@ namespace OnlineLearning_API.Controllers
 
             var tokenString = _authService.GenerateTokenString(checkUser);
 
-            return Ok(tokenString);
+            var user = new UserLoginDTO
+            {
+                UserName = checkUser.UserName,
+                Image = checkUser.Image,
+                Role = checkUser.Role.RoleName,
+                TokenString = tokenString
+            };
+
+            return Ok(user);
         }
 
         [HttpPost("Register")]
@@ -71,7 +82,7 @@ namespace OnlineLearning_API.Controllers
                 UserName = registerUserDTO.UserName,
                 Email = registerUserDTO.Email,
                 Password = registerUserDTO.Password,
-                RoleId = registerUserDTO.RoleId,
+                RoleId = registerUserDTO.RoleId != null ? registerUserDTO.RoleId : 3,
                 Status = true,
                 Role = _context.Roles.FirstOrDefault(r => r.RoleId == registerUserDTO.RoleId),
                 CreateAt = DateTime.Now
@@ -89,6 +100,14 @@ namespace OnlineLearning_API.Controllers
                 return Conflict(ex);
             }
             
+        }
+
+        [HttpGet("Logout")]
+        public async Task<IActionResult> logOut()
+        {
+            await HttpContext.SignOutAsync(JwtBearerDefaults.AuthenticationScheme);
+
+            return Ok();
         }
     }
 }

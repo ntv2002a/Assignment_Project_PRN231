@@ -42,6 +42,9 @@
             <a href="login.html" class="option-btn">login</a>
             <a href="register.html" class="option-btn">register</a>
          </div>
+         <div class="flex-btn-2">
+            <a href="#" class="option-btn">logout</a>
+         </div>
       </div>
 
    </section>
@@ -236,27 +239,46 @@
    </div>
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<footer class="footer">
-
-   &copy; copyright @ 2022 by <span>mr. web designer</span> | all rights reserved!
-
-</footer>
-
 <!-- custom js file link  -->
 <script src="js/script.js"></script>
+<script src="lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+   $(document).ready(function() {
+    var userJSON = localStorage.getItem('user');
+    if (userJSON) {
+        var user = JSON.parse(userJSON);
+        
+        // Thêm thông tin người dùng vào các phần tử HTML tương ứng
+        $('.side-bar .profile .image').attr('src', user.image);
+        $('.flex .profile .image').attr('src', user.image);
+        $('.side-bar .profile .name').text(user.userName);
+        $('.flex .profile .name').text(user.userName);
+        $('.side-bar .profile .role').text(user.role);
+        $('.flex .profile .role').text(user.role);
+
+        // Ẩn nút "Login" và "Register", hiển thị nút "Logout"
+        $('.profile .flex-btn').hide();
+        $('.profile .flex-btn-2').show();
+    }
+    else {
+      $('.flex .profile .image').hide();
+      $('.flex .profile .name').hide();
+      $('.flex .profile .role').hide();
+      $('.flex .profile .btn').hide();
+      $('.flex .profile .flex-btn-2').hide();
+      $('.side-bar .profile').hide();
+    }
+
+    // Xử lý sự kiện click cho nút "Logout"
+    $('.profile .flex-btn-2').click(function() {
+        // Xóa thông tin người dùng từ localStorage
+        localStorage.removeItem('user');
+        // Refresh trang để hiển thị lại nút "Login" và "Register"
+        location.reload();
+    });
+});
+
+</script>
 
    
 </body>

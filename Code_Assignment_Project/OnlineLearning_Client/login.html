@@ -15,11 +15,12 @@
 </head>
 <body>
 
+   
 <header class="header">
    
    <section class="flex">
 
-      <a href="home.html" class="logo">Educa.</a>
+      <a href="home.html" class="logo">Online Learning.</a>
 
       <form action="search.html" method="post" class="search-form">
          <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
@@ -34,10 +35,6 @@
       </div>
 
       <div class="profile">
-         <img src="images/pic-1.jpg" class="image" alt="">
-         <h3 class="name">shaikh anas</h3>
-         <p class="role">studen</p>
-         <a href="profile.html" class="btn">view profile</a>
          <div class="flex-btn">
             <a href="login.html" class="option-btn">login</a>
             <a href="register.html" class="option-btn">register</a>
@@ -55,10 +52,6 @@
    </div>
 
    <div class="profile">
-      <img src="images/pic-1.jpg" class="image" alt="">
-      <h3 class="name">shaikh anas</h3>
-      <p class="role">studen</p>
-      <a href="profile.html" class="btn">view profile</a>
    </div>
 
    <nav class="navbar">
@@ -73,39 +66,54 @@
 
 <section class="form-container">
 
-   <form action="" method="post" enctype="multipart/form-data">
+   <form method="post" enctype="multipart/form-data">
       <h3>login now</h3>
       <p>your email <span>*</span></p>
-      <input type="email" name="email" placeholder="enter your email" required maxlength="50" class="box">
+      <input id="EmailInput" type="email" name="email" placeholder="enter your email" required maxlength="50" class="box" />
       <p>your password <span>*</span></p>
-      <input type="password" name="pass" placeholder="enter your password" required maxlength="20" class="box">
-      <input type="submit" value="login new" name="submit" class="btn">
+      <input id="PasswordInput" type="password" name="pass" placeholder="enter your password" required maxlength="20" class="box" />
+      <input id="LoginBtn" type="submit" value="login new" name="submit" class="btn" />
    </form>
 
 </section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<footer class="footer">
-
-   &copy; copyright @ 2022 by <span>mr. web designer</span> | all rights reserved!
-
-</footer>
-
 <!-- custom js file link  -->
 <script src="js/script.js"></script>
+<script src="lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+   jQuery.support.cors = true;
+   //Call Login API
+   $('#LoginBtn').click(function (e) {
+      e.preventDefault();
+      //Get login details from form
+      var email = $('#EmailInput').val().toString();
+      var password = $('#PasswordInput').val().toString();
+
+      //Create LoginUser object
+      var loginUserDTO = {
+         email: email,
+         password: password
+      }
+      
+      //Send Ajax
+      $.ajax({
+         url: 'http://localhost:1605/api/Authentication/Login',
+         method: 'POST',
+         contentType: 'application/JSON',
+         data: JSON.stringify(loginUserDTO),
+         success: function(response) {
+            var userJSON = JSON.stringify(response);
+            localStorage.setItem('user', userJSON);
+            console.log("đã chạy vào đây!");
+            window.location.href = 'home.html';
+         },
+         error: function(xhr, status, error) {
+            console.log("Lỗi!");
+         }
+      });
+   });
+
+</script>
 
    
 </body>

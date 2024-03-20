@@ -29,7 +29,6 @@ builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters()
@@ -48,9 +47,9 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Admin", policy => policy.RequireRole("admin"));
-    options.AddPolicy("Lecturer", policy => policy.RequireRole("lecturer"));
-    options.AddPolicy("Student", policy => policy.RequireRole("student"));
+    options.AddPolicy("admin", policy => policy.RequireRole("admin"));
+    options.AddPolicy("lecturer", policy => policy.RequireRole("lecturer"));
+    options.AddPolicy("student", policy => policy.RequireRole("student"));
 });
 
 var app = builder.Build();

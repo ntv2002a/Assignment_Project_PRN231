@@ -9,14 +9,14 @@ namespace OnlineLearning_API.Controllers
     public class TestController : ControllerBase
     {
         [HttpGet("admin")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "admin")]
         public IActionResult AdminAction()
         {
             return Ok("Admin Action Done");
         }
 
         [HttpGet("student")]
-        [Authorize(Policy = "Student")]
+        [Authorize(Policy = "student")]
         public IActionResult StudentAction()
         {
             return Ok("Student Action Done");
