@@ -46,6 +46,13 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("admin"));
+    options.AddPolicy("Lecturer", policy => policy.RequireRole("lecturer"));
+    options.AddPolicy("Student", policy => policy.RequireRole("student"));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

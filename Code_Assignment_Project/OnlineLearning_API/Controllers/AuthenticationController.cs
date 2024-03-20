@@ -39,6 +39,8 @@ namespace OnlineLearning_API.Controllers
                 return BadRequest("Wrong Password.");
             }
 
+            checkUser.Role = _context.Roles.FirstOrDefault(r => r.RoleId == checkUser.RoleId);
+
             var tokenString = _authService.GenerateTokenString(checkUser);
 
             return Ok(tokenString);
