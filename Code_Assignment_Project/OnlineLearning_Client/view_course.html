@@ -152,6 +152,8 @@
             // Ẩn nút "Login" và "Register", hiển thị nút "Logout"
             $('.profile .flex-btn').hide();
             $('.profile .flex-btn-2').show();
+
+
          }
          else {
             $('.flex .profile .image').hide();
@@ -162,9 +164,6 @@
             $('.side-bar .profile').hide();
          }
 
-         //Xử lý khi khóa học đã được người dùng enroll trước đó
-
-
          // Xử lý sự kiện click cho nút "Logout"
          $('.profile .flex-btn-2').click(function () {
             // Xóa thông tin người dùng từ localStorage
@@ -172,7 +171,6 @@
             // Refresh trang để hiển thị lại nút "Login" và "Register"
             location.reload();
          });
-
 
          function fetchCourseDetails(courseId) {
             $.ajax({
@@ -189,7 +187,7 @@
 
                            <div class="thumb">
                               <img src="${courseList.image}" alt="">
-                              <span>10 videos</span>
+                              <span>6 videos</span>
                            </div>
                         </div>
                         <div class="column">
@@ -253,22 +251,18 @@
                                  window.location.reload();
                               }
                            }
-                        })
+                        });
                      }
                      else {
                         alert("You need to login before enroll this course!");
                         window.location.href = 'login.html';
                      }
-
-
                   })
                },
                error: function (xhr, status, error) {
                   console.error(xhr.responseText);
                }
             });
-
-
          }
 
          var urlParams = new URLSearchParams(window.location.search);
@@ -277,8 +271,78 @@
             fetchCourseDetails(courseId);
          }
 
-
+         checkEnrollment();
       });
+
+      function checkEnrollment() {
+         //Nếu đã có người dùng thì check xem liệu khóa học này người đó đã enroll chưa
+         var urlParams = new URLSearchParams(window.location.search);
+         var courseId = urlParams.get('courseId');
+
+         var userJSON = localStorage.getItem('user');
+
+         if (userJSON) {
+            var user = JSON.parse(userJSON);
+            var tokenString = user.tokenString;
+            var userId = user.userId;
+
+            var enrollCourseDTO = {
+               userId: userId,
+               courseId: courseId
+            };
+
+            $.ajax({
+               url: 'http://localhost:1605/api/Enrollment/CheckEnrollYet',
+               method: 'POST',
+               contentType: 'application/json',
+               headers: {
+                  'Authorization': 'Bearer ' + tokenString
+               },
+               data: JSON.stringify(enrollCourseDTO),
+               success: function (response) {
+                  if (response) {
+                     $('.playlist-details .row .column .save-playlist #save-playlist-btn').text('Enrolled');
+                     showListLesson();
+                     console.log("hide successfull");
+                     
+                  }
+                  else {
+                     $('.playlist-videos').hide();
+                  }
+
+               },
+               error: function (xhr, status, error) {
+                  console.log('Error: ', status, error);
+               }
+            });
+
+         }
+
+      }
+
+      function showListLesson() {
+         var urlParams = new URLSearchParams(window.location.search);
+         var courseId = urlParams.get('courseId');
+
+         $.ajax({
+            url: 'http://localhost:1605/api/Lesson/LessonList?$filter=courseId%20eq%20'+ courseId + '&$orderby=lessonOrder%20asc',
+            method: 'GET',
+            contentType: 'application/json',
+            success: function(response) {
+               $('.playlist-videos .box-container').empty();
+               $.each(response, function(index, lessonList) {
+                  $('.playlist-videos .box-container').append(`
+                  <a class="box" href="watch-video.html?courseId=${courseId}&lessonId=${lessonList.lessonId}">
+                     <i class="fas fa-play"></i>
+                     <img src="${lessonList.videoUrl}.png" alt="">
+                     <h3>${lessonList.lessonName}</h3>
+                  </a>
+                  `);
+               });
+               
+            }
+         });
+      }
 
    </script>
 

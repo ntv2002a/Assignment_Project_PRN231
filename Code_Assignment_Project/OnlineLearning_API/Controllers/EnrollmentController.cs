@@ -29,6 +29,18 @@ namespace OnlineLearning_API.Controllers
 
             return Ok();
         }
-        
+
+        [HttpPost("CheckEnrollYet")]
+        [Authorize(Policy = "student")]
+        public IActionResult isEnrolled(EnrollCourseDTO isEnrolledCourseDTO)
+        {
+            var checkEnrollment = _context.Enrollments.FirstOrDefault(e => e.CourseId == isEnrolledCourseDTO.CourseId && e.UserId == isEnrolledCourseDTO.UserId && e.IsArchived == false);
+            if (checkEnrollment == null)
+            {
+                return Ok(false);
+            }
+            else return Ok(true);
+        }
+
     }
 }
