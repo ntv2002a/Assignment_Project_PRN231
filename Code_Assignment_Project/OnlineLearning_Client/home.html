@@ -23,9 +23,9 @@
 
          <a href="home.html" class="logo">Online Learning</a>
 
-         <form action="search.html" method="post" class="search-form">
-            <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
-            <button type="submit" class="fas fa-search"></button>
+         <form class="search-form">
+            <input id="search_input" type="text" name="search_box" required placeholder="search courses..." maxlength="100">
+            <button id="search_btn" type="submit" class="fas fa-search"></button>
          </form>
 
          <div class="icons">
@@ -271,7 +271,50 @@
             // Refresh trang để hiển thị lại nút "Login" và "Register"
             location.reload();
          });
+
+          // Xử lý sự kiện search
+          $('#search_btn').click(function(e) {
+            e.preventDefault();
+            var searchTerm = $('#search_input').val().trim();
+
+            //Gọi hàm search
+            searchCourse(searchTerm);
+         });
       });
+
+      function searchCourse(name) {
+         $.ajax({
+            url: 'http://localhost:1605/api/Course/GetCourseList?$filter=contains(courseName,%20%27' + name + '%27)',
+            method: 'GET',
+            contentType: 'application/json',
+            success: function (res) {
+               $('.courses .box-container').empty();
+
+               $.each(res, function (index, courseList) {
+                  $('.courses .box-container').append(`
+                        <div class="box">
+                           <div class="tutor">
+                              <img src="${courseList.expertImage}" alt="">
+                              <div class="info">
+                                 <h3>${courseList.expertName}</h3>
+                                 <span>${courseList.createAt}</span>
+                              </div>
+                           </div>
+                           <div class="thumb">
+                              <img src="${courseList.image}" alt="">
+                              <span>6 videos</span>
+                           </div>
+                           <h3 class="title">${courseList.courseName}</h3>
+                           <a href="view_course.html?courseId=${courseList.courseId}" class="inline-btn">View Course</a>
+                        </div>
+                  `);
+               });
+            },
+            error: function (xhr, status, error) {
+               console.error(xhr.responseText);
+            }
+         });
+      }
 
    </script>
 </body>
