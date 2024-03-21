@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>video playlist</title>
+
+   <!-- font awesome cdn link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+   <header class="header">
+
+      <section class="flex">
+
+         <a href="home.html" class="logo">Online Learning</a>
+
+         <form action="search.html" method="post" class="search-form">
+            <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
+            <button type="submit" class="fas fa-search"></button>
+         </form>
+
+         <div class="icons">
+            <div id="menu-btn" class="fas fa-bars"></div>
+            <div id="search-btn" class="fas fa-search"></div>
+            <div id="user-btn" class="fas fa-user"></div>
+            <div id="toggle-btn" class="fas fa-sun"></div>
+         </div>
+
+         <div class="profile">
+            <img src="images/pic-1.jpg" class="image" alt="">
+            <h3 class="name">shaikh anas</h3>
+            <p class="role">studen</p>
+            <a href="profile.html" class="btn">view profile</a>
+            <div class="flex-btn">
+               <a href="login.html" class="option-btn">login</a>
+               <a href="register.html" class="option-btn">register</a>
+            </div>
+            <div class="flex-btn-2">
+               <a href="#" class="option-btn">logout</a>
+            </div>
+         </div>
+
+      </section>
+
+   </header>
+
+   <div class="side-bar">
+
+      <div id="close-btn">
+         <i class="fas fa-times"></i>
+      </div>
+
+      <div class="profile">
+         <img src="images/pic-1.jpg" class="image" alt="">
+         <h3 class="name">shaikh anas</h3>
+         <p class="role">studen</p>
+         <a href="profile.html" class="btn">view profile</a>
+      </div>
+
+      <nav class="navbar">
+         <a href="home.html"><i class="fas fa-home"></i><span>home</span></a>
+         <a href="about.html"><i class="fas fa-question"></i><span>about</span></a>
+         <a href="courses.html"><i class="fas fa-graduation-cap"></i><span>courses</span></a>
+         <a href="teachers.html"><i class="fas fa-chalkboard-user"></i><span>teachers</span></a>
+         <a href="contact.html"><i class="fas fa-headset"></i><span>contact us</span></a>
+      </nav>
+
+   </div>
+
+   <section class="playlist-details">
+
+      <h1 class="heading">Course details</h1>
+
+      <div class="row">
+      </div>
+
+   </section>
+
+   <section class="playlist-videos">
+
+      <h1 class="heading">Course videos</h1>
+
+      <div class="box-container">
+
+         <a class="box" href="watch-video.html">
+            <i class="fas fa-play"></i>
+            <img src="images/post-1-1.png" alt="">
+            <h3>complete HTML tutorial (part 01)</h3>
+         </a>
+
+         <a class="box" href="watch-video.html">
+            <i class="fas fa-play"></i>
+            <img src="images/post-1-2.png" alt="">
+            <h3>complete HTML tutorial (part 02)</h3>
+         </a>
+
+         <a class="box" href="watch-video.html">
+            <i class="fas fa-play"></i>
+            <img src="images/post-1-3.png" alt="">
+            <h3>complete HTML tutorial (part 03)</h3>
+         </a>
+
+         <a class="box" href="watch-video.html">
+            <i class="fas fa-play"></i>
+            <img src="images/post-1-4.png" alt="">
+            <h3>complete HTML tutorial (part 04)</h3>
+         </a>
+
+         <a class="box" href="watch-video.html">
+            <i class="fas fa-play"></i>
+            <img src="images/post-1-5.png" alt="">
+            <h3>complete HTML tutorial (part 05)</h3>
+         </a>
+
+         <a class="box" href="watch-video.html">
+            <i class="fas fa-play"></i>
+            <img src="images/post-1-6.png" alt="">
+            <h3>complete HTML tutorial (part 06)</h3>
+         </a>
+
+      </div>
+
+   </section>
+
+
+   <!-- custom js file link  -->
+   <script src="js/script.js"></script>
+   <script src="lib/jquery/dist/jquery.js"></script>
+   <script type="text/javascript">
+      $(document).ready(function () {
+         var userJSON = localStorage.getItem('user');
+         if (userJSON) {
+            var user = JSON.parse(userJSON);
+
+            // Thêm thông tin người dùng vào các phần tử HTML tương ứng
+            $('.side-bar .profile .image').attr('src', user.image);
+            $('.flex .profile .image').attr('src', user.image);
+            $('.side-bar .profile .name').text(user.userName);
+            $('.flex .profile .name').text(user.userName);
+            $('.side-bar .profile .role').text(user.role);
+            $('.flex .profile .role').text(user.role);
+
+            // Ẩn nút "Login" và "Register", hiển thị nút "Logout"
+            $('.profile .flex-btn').hide();
+            $('.profile .flex-btn-2').show();
+         }
+         else {
+            $('.flex .profile .image').hide();
+            $('.flex .profile .name').hide();
+            $('.flex .profile .role').hide();
+            $('.flex .profile .btn').hide();
+            $('.flex .profile .flex-btn-2').hide();
+            $('.side-bar .profile').hide();
+         }
+
+         //Xử lý khi khóa học đã được người dùng enroll trước đó
+
+
+         // Xử lý sự kiện click cho nút "Logout"
+         $('.profile .flex-btn-2').click(function () {
+            // Xóa thông tin người dùng từ localStorage
+            localStorage.removeItem('user');
+            // Refresh trang để hiển thị lại nút "Login" và "Register"
+            location.reload();
+         });
+
+
+         function fetchCourseDetails(courseId) {
+            $.ajax({
+               url: 'http://localhost:1605/api/Course/GetCourseList?$filter=CourseId%20eq%20' + courseId,
+               method: 'GET',
+               success: function (response) {
+                  $('.playlist-details .row').empty();
+                  $.each(response, function (index, courseList) {
+                     $('.playlist-details .row').append(`
+                        <div class="column">
+                           <form action="" method="post" class="save-playlist">
+                              <button id="save-playlist-btn" type="submit"><i class="far fa-bookmark"></i> <span>save playlist</span></button>
+                           </form>
+
+                           <div class="thumb">
+                              <img src="${courseList.image}" alt="">
+                              <span>10 videos</span>
+                           </div>
+                        </div>
+                        <div class="column">
+                           <div class="tutor">
+                              <img src="${courseList.expertImage}" alt="">
+                              <div>
+                                 <h3>${courseList.expertName}</h3>
+                                 <span>${courseList.createAt}</span>
+                              </div>
+                           </div>
+
+                           <div class="details">
+                              <h3>${courseList.courseName}</h3>
+                              <p>${courseList.description}</p>
+                              <a href="teacher_profile.html" class="inline-btn">view profile</a>
+                           </div>
+                        </div>
+                        `);
+                  });
+
+                  $('#save-playlist-btn').click(function (e) {
+                     e.preventDefault();
+                     var urlParams = new URLSearchParams(window.location.search);
+                     var courseId = urlParams.get('courseId');
+
+                     var userJSON = localStorage.getItem('user');
+
+                     if (userJSON) {
+                        var user = JSON.parse(userJSON);
+                        var userId = user.userId;
+
+                        var tokenString = user.tokenString;
+
+                        var enrollCourseDTO = {
+                           userId: userId,
+                           courseId: courseId
+                        };
+
+                        console.log(enrollCourseDTO);
+                        jQuery.support.cors = true;
+                        $.ajax({
+                           url: 'http://localhost:1605/api/Enrollment/EnrollCourse',
+                           method: 'POST',
+                           contentType: 'application/json',
+                           headers: {
+                              'Authorization': 'Bearer ' + tokenString
+                           },
+                           data: JSON.stringify(enrollCourseDTO),
+                           success: function (response) {
+                              alert("Enroll this Course successfully!");
+                              window.location.reload();
+                           },
+                           error: function (xhr, status, error) {
+                              if (xhr.status === 401) {
+                                 localStorage.removeItem('user');
+                                 window.location.href = 'login.html';
+                              }
+                              else {
+                                 console.log('Error: ', status, error);
+                                 alert("You don't have permisson to enroll this course, this course just for student!");
+                                 window.location.reload();
+                              }
+                           }
+                        })
+                     }
+                     else {
+                        alert("You need to login before enroll this course!");
+                        window.location.href = 'login.html';
+                     }
+
+
+                  })
+               },
+               error: function (xhr, status, error) {
+                  console.error(xhr.responseText);
+               }
+            });
+
+
+         }
+
+         var urlParams = new URLSearchParams(window.location.search);
+         var courseId = urlParams.get('courseId');
+         if (courseId) {
+            fetchCourseDetails(courseId);
+         }
+
+
+      });
+
+   </script>
+
+</body>
+
+</html>
