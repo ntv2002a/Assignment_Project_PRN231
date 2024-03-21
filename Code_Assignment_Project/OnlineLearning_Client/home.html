@@ -216,6 +216,41 @@
             $('.side-bar .profile').hide();
          }
 
+         function fetchCourse() {
+            $.ajax({
+               url: 'http://localhost:1605/api/Course/GetCourseList',
+               method: 'GET',
+               success: function (res) {
+                  $('.courses .box-container').empty();
+
+                  $.each(res, function (index, courseList) {
+                     $('.courses .box-container').append(`
+                        <div class="box">
+                           <div class="tutor">
+                              <img src="${courseList.expertImage}" alt="">
+                              <div class="info">
+                                 <h3>${courseList.expertName}</h3>
+                                 <span>${courseList.createAt}</span>
+                              </div>
+                           </div>
+                           <div class="thumb">
+                              <img src="${courseList.image}" alt="">
+                              <span>10 videos</span>
+                           </div>
+                           <h3 class="title">${courseList.courseName}</h3>
+                           <a href="playlist.html" class="inline-btn">view playlist</a>
+                        </div>
+                  `);
+                  });
+               },
+               error: function (xhr, status, error) {
+                  console.error(xhr.responseText);
+               }
+            });
+         }
+
+         fetchCourse();
+
          // Xử lý sự kiện click cho nút "Logout"
          $('.profile .flex-btn-2').click(function () {
             // Xóa thông tin người dùng từ localStorage
@@ -226,7 +261,7 @@
                method: 'GET',
                contentType: 'application/JSON',
                success: function (response) {
-                  
+
                },
                error: function (xhr, status, error) {
                   console.error(xhr.responseText);

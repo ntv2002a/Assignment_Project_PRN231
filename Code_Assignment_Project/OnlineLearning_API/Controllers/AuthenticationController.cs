@@ -49,7 +49,7 @@ namespace OnlineLearning_API.Controllers
             var user = new UserLoginDTO
             {
                 UserName = checkUser.UserName,
-                Image = checkUser.Image,
+                Image = checkUser.Image != null ? checkUser.Image : "images/pic-1.jpg",
                 Role = checkUser.Role.RoleName,
                 TokenString = tokenString
             };
