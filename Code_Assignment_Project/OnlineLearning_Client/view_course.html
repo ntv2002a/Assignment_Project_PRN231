@@ -91,7 +91,7 @@
 
       <div class="box-container">
 
-         <a class="box" href="watch-video.html">
+         <!-- <a class="box" href="watch-video.html">
             <i class="fas fa-play"></i>
             <img src="images/post-1-1.png" alt="">
             <h3>complete HTML tutorial (part 01)</h3>
@@ -125,7 +125,7 @@
             <i class="fas fa-play"></i>
             <img src="images/post-1-6.png" alt="">
             <h3>complete HTML tutorial (part 06)</h3>
-         </a>
+         </a> -->
 
       </div>
 
@@ -153,7 +153,13 @@
             $('.profile .flex-btn').hide();
             $('.profile .flex-btn-2').show();
 
+            var urlParams = new URLSearchParams(window.location.search);
+            var courseId = urlParams.get('courseId');
+            if (courseId) {
+               fetchCourseDetails(courseId);
+            }
 
+            checkEnrollment();
          }
          else {
             $('.flex .profile .image').hide();
@@ -265,13 +271,7 @@
             });
          }
 
-         var urlParams = new URLSearchParams(window.location.search);
-         var courseId = urlParams.get('courseId');
-         if (courseId) {
-            fetchCourseDetails(courseId);
-         }
 
-         checkEnrollment();
       });
 
       function checkEnrollment() {
@@ -304,7 +304,7 @@
                      $('.playlist-details .row .column .save-playlist #save-playlist-btn').text('Enrolled');
                      showListLesson();
                      console.log("hide successfull");
-                     
+
                   }
                   else {
                      $('.playlist-videos').hide();
@@ -325,21 +325,24 @@
          var courseId = urlParams.get('courseId');
 
          $.ajax({
-            url: 'http://localhost:1605/api/Lesson/LessonList?$filter=courseId%20eq%20'+ courseId + '&$orderby=lessonOrder%20asc',
+            url: 'http://localhost:1605/api/Lesson/LessonList?$filter=courseId%20eq%20' + courseId + '&$orderby=lessonOrder%20asc',
             method: 'GET',
             contentType: 'application/json',
-            success: function(response) {
+            success: function (response) {
                $('.playlist-videos .box-container').empty();
-               $.each(response, function(index, lessonList) {
+               $.each(response, function (index, lessonList) {
                   $('.playlist-videos .box-container').append(`
-                  <a class="box" href="watch-video.html?courseId=${courseId}&lessonId=${lessonList.lessonId}">
+                  <a class="box" href="watch-video.html?lessonId=${lessonList.lessonId}">
                      <i class="fas fa-play"></i>
                      <img src="${lessonList.videoUrl}.png" alt="">
                      <h3>${lessonList.lessonName}</h3>
                   </a>
                   `);
                });
-               
+
+            },
+            error: function (xhr, status, error) {
+               console.error(xhr.responseText);
             }
          });
       }
