@@ -218,7 +218,7 @@
 
          function fetchCourse() {
             $.ajax({
-               url: 'http://localhost:1605/api/Course/GetCourseList',
+               url: 'http://localhost:1605/api/Course/GetCourseList?$top=6',
                method: 'GET',
                success: function (res) {
                   $('.courses .box-container').empty();

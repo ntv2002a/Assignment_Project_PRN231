@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.IdentityModel.Tokens;
 using OnlineLearning_API.DTO.Course;
 using OnlineLearning_API.Models;
@@ -12,6 +13,7 @@ namespace OnlineLearning_API.Controllers
     {
         Prn231OnlineLearningContext _context = new Prn231OnlineLearningContext();
 
+        [EnableQuery]
         [HttpGet("GetCourseList")]
         public IActionResult Get()
         {
@@ -38,7 +40,7 @@ namespace OnlineLearning_API.Controllers
                 });
             }
 
-            return Ok(courseList);
+            return Ok(courseList.AsQueryable());
         }
 
     }

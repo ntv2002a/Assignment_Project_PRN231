@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 using OnlineLearning_API.IService;
 using OnlineLearning_API.Models;
 using OnlineLearning_API.Service;
@@ -15,6 +18,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+static IEdmModel GetEdmModel()
+{
+    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+    builder.EntitySet<Course>("CoursesOdata");
+    return builder.GetEdmModel();
+}
+
 builder.Services.AddDbContext<Prn231OnlineLearningContext>(option =>
                 option.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection")));
 
@@ -25,6 +35,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<IAuthService, AuthService>();
+
+builder.Services.AddControllers().AddOData(option => option.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100).AddRouteComponents("odata", GetEdmModel()));
 
 builder.Services.AddAuthentication(options =>
 {
@@ -65,6 +77,7 @@ app.UseHttpsRedirection();
 app.UseCors("CORSPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 
