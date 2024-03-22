@@ -47,6 +47,7 @@
             <div class="flex-btn-2">
                <a href="#" class="option-btn">logout</a>
             </div>
+            
          </div>
 
       </section>
@@ -178,6 +179,11 @@
             location.reload();
          });
 
+         $('#quiz_btn').click(function(e) {
+                     e.preventDefault();
+                     createQuize_forPublish();
+                  });
+
          function fetchCourseDetails(courseId) {
             $.ajax({
                url: 'http://localhost:1605/api/Course/GetCourseList?$filter=CourseId%20eq%20' + courseId,
@@ -209,6 +215,7 @@
                               <h3>${courseList.courseName}</h3>
                               <p>${courseList.description}</p>
                               <a href="teacher_profile.html" class="inline-btn">view profile</a>
+                              <a href="quiz.html?quizId=1" id="quiz_btn" class="inline-btn">Quiz</a>
                            </div>
                         </div>
                         `);
@@ -346,6 +353,7 @@
             }
          });
       }
+
 
    </script>
 

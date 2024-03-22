@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+</head>
+
+<body>
+    <h1>Quiz</h1>
+    <div id="question-container"></div>
+    <button onclick="submitQuiz()">Submit</button>
+
+
+    <script src="lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var quizId = urlParams.get('quizId');
+
+            fetchQuestions(quizId);
+
+        });
+
+        function fetchQuestions(quizId) {
+            $.ajax({
+                url: 'http://localhost:1605/api/Quiz/' + quizId + '/questions',
+                method: 'GET',
+                contentType: 'application/json',
+                success: function (response) {
+                    $('#question-container').empty();
+                    $.each(response, function(index, question) {
+                        $('#question-container').append(`
+                            <h3>${question.questionContent}</h3>
+                            <ul>
+                                ${question.options.split(';').map(option => `<li>${option}</li>`).join('')}
+                            </ul>
+                        `);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+
+            });
+        }
+    </script>
+    <script>
+        async function submitQuiz() {
+            const userResult = {
+                // Tạo đối tượng userResult từ câu trả lời của người dùng
+                // Bạn cần thêm logic để lấy câu trả lời từ trang HTML
+            };
+
+            const response = await fetch('/api/quiz/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userResult)
+            });
+
+            if (response.ok) {
+                alert('Quiz submitted successfully!');
+            } else {
+                alert('Failed to submit quiz.');
+            }
+        }
+    </script>
+</body>
+
+</html>
