@@ -78,111 +78,23 @@
 
    <section class="courses">
 
-      <h1 class="heading">our courses</h1>
+      <h1 class="heading">Hot Courses</h1>
 
       <div class="box-container">
-
-         <div class="box">
-            <div class="tutor">
-               <img src="images/pic-2.jpg" alt="">
-               <div class="info">
-                  <h3>john deo</h3>
-                  <span>21-10-2022</span>
-               </div>
-            </div>
-            <div class="thumb">
-               <img src="images/thumb-1.png" alt="">
-               <span>10 videos</span>
-            </div>
-            <h3 class="title">complete HTML tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
-         </div>
-
-         <div class="box">
-            <div class="tutor">
-               <img src="images/pic-3.jpg" alt="">
-               <div class="info">
-                  <h3>john deo</h3>
-                  <span>21-10-2022</span>
-               </div>
-            </div>
-            <div class="thumb">
-               <img src="images/thumb-2.png" alt="">
-               <span>10 videos</span>
-            </div>
-            <h3 class="title">complete CSS tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
-         </div>
-
-         <div class="box">
-            <div class="tutor">
-               <img src="images/pic-4.jpg" alt="">
-               <div class="info">
-                  <h3>john deo</h3>
-                  <span>21-10-2022</span>
-               </div>
-            </div>
-            <div class="thumb">
-               <img src="images/thumb-3.png" alt="">
-               <span>10 videos</span>
-            </div>
-            <h3 class="title">complete JS tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
-         </div>
-
-         <div class="box">
-            <div class="tutor">
-               <img src="images/pic-5.jpg" alt="">
-               <div class="info">
-                  <h3>john deo</h3>
-                  <span>21-10-2022</span>
-               </div>
-            </div>
-            <div class="thumb">
-               <img src="images/thumb-4.png" alt="">
-               <span>10 videos</span>
-            </div>
-            <h3 class="title">complete Boostrap tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
-         </div>
-
-         <div class="box">
-            <div class="tutor">
-               <img src="images/pic-6.jpg" alt="">
-               <div class="info">
-                  <h3>john deo</h3>
-                  <span>21-10-2022</span>
-               </div>
-            </div>
-            <div class="thumb">
-               <img src="images/thumb-5.png" alt="">
-               <span>10 videos</span>
-            </div>
-            <h3 class="title">complete JQuery tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
-         </div>
-
-         <div class="box">
-            <div class="tutor">
-               <img src="images/pic-7.jpg" alt="">
-               <div class="info">
-                  <h3>john deo</h3>
-                  <span>21-10-2022</span>
-               </div>
-            </div>
-            <div class="thumb">
-               <img src="images/thumb-6.png" alt="">
-               <span>10 videos</span>
-            </div>
-            <h3 class="title">complete SASS tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
-         </div>
 
       </div>
 
       <div class="more-btn">
          <a href="courses.html" class="inline-option-btn">view all courses</a>
       </div>
+
+      <h1 class="heading">Hot Lecturers</h1>
+
+      <div class="box-container-2">
+
+      </div>
+
+      
 
    </section>
 
@@ -218,7 +130,7 @@
 
          function fetchCourse() {
             $.ajax({
-               url: 'http://localhost:1605/api/Course/GetCourseList?$top=6',
+               url: 'http://localhost:1605/api/Course/GetCourseList?$Orderby=NumberOfEnrolled%20desc&$top=2',
                method: 'GET',
                success: function (res) {
                   $('.courses .box-container').empty();
@@ -237,8 +149,43 @@
                               <img src="${courseList.image}" alt="">
                               <span>6 videos</span>
                            </div>
-                           <h3 class="title">${courseList.courseName}</h3>
-                           <a href="view_course.html?courseId=${courseList.courseId}" class="inline-btn">view course</a>
+                           <div style="height: 1000px">
+                              <h3 class="title">${courseList.courseName}</h3>
+                           </div>
+                           <div style="flex: 1">
+                              <a href="view_course.html?courseId=${courseList.courseId}" class="inline-btn">view course</a>
+                              <p>Number of enrolled: ${courseList.numberOfEnrolled}</p>
+                           </div>
+                        </div>
+                  `);
+                  });
+               },
+               error: function (xhr, status, error) {
+                  console.error(xhr.responseText);
+               }
+            });
+         }
+
+         function fetchLecturer() {
+            $.ajax({
+               url: 'http://localhost:1605/api/User/GetHotLecturer?$Orderby=Count%20desc&$top=2',
+               method: 'GET',
+               success: function (res) {
+                  $('.courses .box-container-2').empty();
+                  
+                  $.each(res, function (index, lecturerList) {
+                  $('.courses .box-container-2').append(`
+                        <div class="box">
+                           <div class="tutor">
+                              <img src="${lecturerList.image}" alt="">
+                              <div class="info">
+                                 <h3>${lecturerList.userName}</h3>
+                              </div>
+                           </div>
+                           <div style="flex: 1">
+                              <a href="teacher_profile.html" class="inline-btn">view lecturer</a>
+                              <p>Number of enrolled: ${lecturerList.count}</p>
+                           </div>
                         </div>
                   `);
                   });
@@ -250,6 +197,7 @@
          }
 
          fetchCourse();
+         fetchLecturer();
 
          // Xử lý sự kiện click cho nút "Logout"
          $('.profile .flex-btn-2').click(function () {

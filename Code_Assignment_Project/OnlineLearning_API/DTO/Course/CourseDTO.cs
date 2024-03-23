@@ -18,5 +18,7 @@ namespace OnlineLearning_API.DTO.Course
         public string CreateAt { get; set; }
 
         public string Description { get; set; }
+
+        public int NumberOfEnrolled { get; set; }
     }
 }

@@ -260,14 +260,14 @@
 
          function fetchCourse() {
             $.ajax({
-               url: 'http://localhost:1605/api/Course/GetCourseList',
+               url: 'http://localhost:1605/api/Course/GetCourseList?$Orderby=numberOfEnrolled%20desc',
                method: 'GET',
                success: function (res) {
                   $('.courses .box-container').empty();
 
                   $.each(res, function (index, courseList) {
                      $('.courses .box-container').append(`
-                        <div class="box">
+                     <div class="box">
                            <div class="tutor">
                               <img src="${courseList.expertImage}" alt="">
                               <div class="info">
@@ -279,8 +279,13 @@
                               <img src="${courseList.image}" alt="">
                               <span>6 videos</span>
                            </div>
-                           <h3 class="title">${courseList.courseName}</h3>
-                           <a href="view_course.html?courseId=${courseList.courseId}" class="inline-btn">View Course</a>
+                           <div style="height: 1200px">
+                              <h3 class="title">${courseList.courseName}</h3>
+                           </div>
+                           <div style="flex: 1">
+                              <a href="view_course.html?courseId=${courseList.courseId}" class="inline-btn">view course</a>
+                              <p>Number of enrolled: ${courseList.numberOfEnrolled}</p>
+                           </div>
                         </div>
                   `);
                   });
@@ -326,7 +331,7 @@
 
       function searchCourse(name) {
          $.ajax({
-            url: 'http://localhost:1605/api/Course/GetCourseList?$filter=contains(courseName,%20%27' + name + '%27)',
+            url: 'http://localhost:1605/api/Course/GetCourseList?$filter=contains(courseName,%20%27' + name + '%27)&$Orderby=numberOfEnrolled%20desc',
             method: 'GET',
             contentType: 'application/json',
             success: function (res) {
@@ -334,7 +339,7 @@
 
                $.each(res, function (index, courseList) {
                   $('.courses .box-container').append(`
-                        <div class="box">
+                  <div class="box">
                            <div class="tutor">
                               <img src="${courseList.expertImage}" alt="">
                               <div class="info">
@@ -346,8 +351,13 @@
                               <img src="${courseList.image}" alt="">
                               <span>6 videos</span>
                            </div>
-                           <h3 class="title">${courseList.courseName}</h3>
-                           <a href="view_course.html?courseId=${courseList.courseId}" class="inline-btn">View Course</a>
+                           <div style="height: 1200px">
+                              <h3 class="title">${courseList.courseName}</h3>
+                           </div>
+                           <div style="flex: 1">
+                              <a href="view_course.html?courseId=${courseList.courseId}" class="inline-btn">view course</a>
+                              <p>Number of enrolled: ${courseList.numberOfEnrolled}</p>
+                           </div>
                         </div>
                   `);
                });
