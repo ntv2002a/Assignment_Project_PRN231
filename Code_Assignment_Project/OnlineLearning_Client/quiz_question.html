@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+</head>
+
+<body>
+    <h1>Quiz</h1>
+    <div id="question-container">
+        <p id="question-content"></p>
+        <form id="answer-form">
+            <input type="radio" id="optionA" name="answer" value="A">
+            <label for="optionA" id="labelA"></label><br>
+            <input type="radio" id="optionB" name="answer" value="B">
+            <label for="optionB" id="labelB"></label><br>
+            <input type="radio" id="optionC" name="answer" value="C">
+            <label for="optionC" id="labelC"></label><br>
+            <input type="radio" id="optionD" name="answer" value="D">
+            <label for="optionC" id="labelD"></label><br>
+            <button type="button" onclick="nextQuestion(2)">Next</button>
+        </form>
+    </div>
+
+
+    <script src="lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript">
+        function nextQuestion(id) {
+                fetchQuestions(id);
+            }
+            
+
+
+
+        function fetchQuestions(id) {
+            $.ajax({
+                url: 'http://localhost:5049/api/Question/GetQuestions/' + id,
+                method: 'GET',
+                contentType: 'application/json',
+                success: function (response) {
+                        $('#question-content').html(`
+                            ${response.content}
+                        `);
+                        $('#labelA').html(`${response.a}`)
+                        $('#labelB').html(`${response.b}`)
+                        $('#labelC').html(`${response.c}`)
+                        $('#labelD').html(`${response.d}`)
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+
+            });
+
+            
+        }
+        fetchQuestions(1);
+    </script>
+</body>
+
+</html>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using OnlineLearning_API.DTO.Course;
@@ -21,6 +20,10 @@ namespace OnlineLearning_API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// To get the list of Hot lecture of all course
+        /// </summary>
+        /// <returns></returns>
         [EnableQuery]
         [HttpGet("GetHotLecturer")]
         public IActionResult GetHotLecturer()
@@ -29,13 +32,14 @@ namespace OnlineLearning_API.Controllers
 
             var listLecturerWithCount = new List<HotLecturerDTO>();
 
+            // Get all Lecturer to count all of enrollment of their course
             foreach (var item in listAllLecturer)
             {
                 int counting = 0;
                 var listCourseOfThis = _context.Courses.Where(c => c.ExpertId == item.UserId).ToList();
                 var courseList = new List<CourseDTO>();
 
-
+                // Get all Course of each lecturer
                 foreach (var course in listCourseOfThis)
                 {
                     courseList.Add(new CourseDTO
@@ -52,11 +56,13 @@ namespace OnlineLearning_API.Controllers
                     });
                 }
 
+                // Count the number of enrolled 
                 foreach (var item1 in courseList)
                 {
                     counting += item1.NumberOfEnrolled;
                 }
 
+                // Add lecturer with count enrolled number to list
                 listLecturerWithCount.Add(
                     new HotLecturerDTO
                     {
@@ -67,6 +73,7 @@ namespace OnlineLearning_API.Controllers
                     }
                  );
             }
+
             return Ok(listLecturerWithCount.AsQueryable());
         }
     }

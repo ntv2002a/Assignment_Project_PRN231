@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineLearning_API.DTO.User;
@@ -12,6 +10,7 @@ namespace OnlineLearning_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class AuthenticationController : ControllerBase
     {
         private readonly Prn231OnlineLearningContext _context = new Prn231OnlineLearningContext();
